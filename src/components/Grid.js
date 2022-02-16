@@ -1,127 +1,9 @@
-import "./App.css";
+import "../App.css";
 import React, { useRef } from "react";
 
-function Grid() {
+function Grid(turnControl) {
   const gridRef = useRef([]);
-
-  function checkRowWin(row) {
-    let winScore = 0;
-
-    const rowList = document.querySelectorAll(`[row = "${row}"]`);
-    rowList.forEach((e) => {
-      if (e.classList.contains("X")) {
-        winScore++;
-      }
-    });
-    if (winScore == 3) {
-      console.log("WINNER");
-    }
-  }
-
-  function checkColumnWin(column) {
-    let winScore = 0;
-
-    const columnList = document.querySelectorAll(`[column = "${column}"]`);
-    columnList.forEach((e) => {
-      if (e.classList.contains("X")) {
-        winScore++;
-      }
-    });
-    if (winScore == 3) {
-      console.log("WINNER");
-    }
-  }
-
-  function checkDiagonalWin(row, column) {
-    let winScore = 0;
-
-    const minGridSize = 1;
-    const maxGridSize = 3;
-
-    if (row == minGridSize && column == minGridSize) {
-      for (let i = 0; i < maxGridSize; i++) {
-        const element = document.querySelector(
-          `[row = "${row + i}"][column = "${column + i}"]`
-        );
-        if (element) {
-          if (element.classList.contains("X")) {
-            winScore++;
-          }
-        }
-      }
-    } else if (row == minGridSize && column == maxGridSize) {
-      for (let i = 0; i < maxGridSize; i++) {
-        const element = document.querySelector(
-          `[row = "${row + i}"][column = "${column - i}"]`
-        );
-        if (element) {
-          if (element.classList.contains("X")) {
-            winScore++;
-          }
-        }
-      }
-    } else if (row == maxGridSize && column == minGridSize) {
-      for (let i = 0; i < maxGridSize; i++) {
-        const element = document.querySelector(
-          `[row = "${row - i}"][column = "${column + i}"]`
-        );
-        if (element) {
-          if (element.classList.contains("X")) {
-            winScore++;
-          }
-        }
-      }
-    } else if (row == maxGridSize && column == maxGridSize) {
-      for (let i = 0; i < maxGridSize; i++) {
-        const element = document.querySelector(
-          `[row = "${row - i}"][column = "${column - i}"]`
-        );
-        if (element) {
-          if (element.classList.contains("X")) {
-            winScore++;
-          }
-        }
-      }
-    } else {
-      const corner1 = { row: 1, column: 1 };
-      const corner2 = { row: 3, column: 1 };
-      const corner3 = { row: 1, column: 3 };
-      const corner4 = { row: 3, column: 3 };
-      const corner = [corner1, corner2, corner3, corner4];
-      for (var i = 0; i < corner.length; i++) {
-        if (checkDiagonalWin(corner[i].row, corner[i].column)) {
-          return true;
-        }
-      }
-    }
-    if (winScore == 3) {
-      return true;
-    }
-    return false;
-  }
-
-  function checkWin(index) {
-    const row = parseInt(gridRef.current[index].getAttribute("row"));
-    const column = parseInt(gridRef.current[index].getAttribute("column"));
-    if (
-      checkRowWin(row) ||
-      checkColumnWin(column) ||
-      checkDiagonalWin(row, column)
-    ) {
-      console.log("WINNER");
-    }
-  }
-
-  function addXO(index) {
-    if (
-      gridRef.current[index].classList.contains("X") ||
-      gridRef.current[index].classList.contains("O")
-    )
-      return;
-
-    gridRef.current[index].classList.add("X");
-    checkWin(index);
-  }
+  const turn = turnControl.turn;
 
   return (
     <div id="grid-Container">
@@ -142,6 +24,128 @@ function Grid() {
       </div>
     </div>
   );
+
+  function checkRowWin(row, turn) {
+    let winScore = 0;
+
+    const rowList = document.querySelectorAll(`[row = "${row}"]`);
+    rowList.forEach((e) => {
+      if (e.classList.contains(turn)) {
+        winScore++;
+      }
+    });
+    if (winScore === 3) {
+      return true;
+    }
+    return false;
+  }
+
+  function checkColumnWin(column, turn) {
+    let winScore = 0;
+
+    const columnList = document.querySelectorAll(`[column = "${column}"]`);
+    columnList.forEach((e) => {
+      if (e.classList.contains(turn)) {
+        winScore++;
+      }
+    });
+    if (winScore === 3) {
+      return true;
+    }
+    return false;
+  }
+
+  function checkDiagonalWin(row, column, turn) {
+    let winScore = 0;
+
+    const minGridSize = 1;
+    const maxGridSize = 3;
+
+    if (row === minGridSize && column === minGridSize) {
+      for (let i = 0; i < maxGridSize; i++) {
+        const element = document.querySelector(
+          `[row = "${row + i}"][column = "${column + i}"]`
+        );
+        if (element) {
+          if (element.classList.contains(turn)) {
+            winScore++;
+          }
+        }
+      }
+    } else if (row === minGridSize && column === maxGridSize) {
+      for (let i = 0; i < maxGridSize; i++) {
+        const element = document.querySelector(
+          `[row = "${row + i}"][column = "${column - i}"]`
+        );
+        if (element) {
+          if (element.classList.contains(turn)) {
+            winScore++;
+          }
+        }
+      }
+    } else if (row === maxGridSize && column === minGridSize) {
+      for (let i = 0; i < maxGridSize; i++) {
+        const element = document.querySelector(
+          `[row = "${row - i}"][column = "${column + i}"]`
+        );
+        if (element) {
+          if (element.classList.contains(turn)) {
+            winScore++;
+          }
+        }
+      }
+    } else if (row === maxGridSize && column === maxGridSize) {
+      for (let i = 0; i < maxGridSize; i++) {
+        const element = document.querySelector(
+          `[row = "${row - i}"][column = "${column - i}"]`
+        );
+        if (element) {
+          if (element.classList.contains(turn)) {
+            winScore++;
+          }
+        }
+      }
+    } else if (row === 2 && column === 2) {
+      const corner1 = { row: 1, column: 1 };
+      const corner2 = { row: 3, column: 1 };
+      const corner3 = { row: 1, column: 3 };
+      const corner4 = { row: 3, column: 3 };
+      const corner = [corner1, corner2, corner3, corner4];
+      for (var i = 0; i < corner.length; i++) {
+        if (checkDiagonalWin(corner[i].row, corner[i].column, turn)) {
+          return true;
+        }
+      }
+    }
+    if (winScore === 3) {
+      return true;
+    }
+    return false;
+  }
+
+  function checkWin(index, turn) {
+    const row = parseInt(gridRef.current[index].getAttribute("row"));
+    const column = parseInt(gridRef.current[index].getAttribute("column"));
+    if (
+      checkRowWin(row, turn) ||
+      checkColumnWin(column, turn) ||
+      checkDiagonalWin(row, column, turn)
+    ) {
+      console.log("WINNER");
+    }
+  }
+
+  function addXO(index) {
+    if (
+      gridRef.current[index].classList.contains("X") ||
+      gridRef.current[index].classList.contains("O")
+    )
+      return;
+    console.log(turn);
+    gridRef.current[index].classList.add(turn);
+    turnControl.changeTurn();
+    checkWin(index, turn);
+  }
 }
 
 export default Grid;
