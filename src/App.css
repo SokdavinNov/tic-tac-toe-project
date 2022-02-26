@@ -2,6 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: sans-serif;
 }
 
 .flex-Container {
@@ -18,22 +19,21 @@
   color: red;
 }
 
-#grid-Container {
+.grid-Container {
   display: grid;
   justify-content: center;
   align-items: center;
 }
 
-#grid {
+.grid {
   width: 400px;
   height: 400px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border: 1px black solid;
-  font-size: 10rem;
 }
 
-#grid > * {
+.grid > * {
   height: 100%;
   display: flex;
   align-items: center;
@@ -41,37 +41,132 @@
   border: 1px black solid;
 }
 
-.X {
+.overlay {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.overlay > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 50%;
+  height: 50%;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 2rem;
+  animation: win-Screen 0.5s ease-in;
+}
+
+.overlay > div > h1 {
+  color: white;
+  font-size: 5rem;
+  margin: 1rem 0 1rem 0;
+}
+
+.overlay > div > button {
+  color: white;
+  background-color: red;
+  padding: 1rem;
+  border-radius: 2rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.overlay > div > button:hover,
+.overlay > div > button:active {
+  color: red;
+  background-color: white;
+}
+
+.hide {
+  display: none;
+}
+
+.X,
+.O {
   position: relative;
 }
 
-.X::before {
+.X::before,
+.X::after {
   content: "";
-  display: inline-block;
   position: absolute;
-  width: 10%;
-  height: 50%;
-  background-color: red;
+  background-color: black;
   transform: rotate(45deg);
 }
 
+.X::before {
+  width: 10%;
+  height: 50%;
+}
+
 .X::after {
-  content: "";
   width: 50%;
   height: 10%;
-  background-color: red;
-  transform: rotate(45deg);
 }
 
 .O::before {
   content: "";
-  width: 45%;
-  height: 45%;
-  border: 0.5rem solid red;
+  width: 40%;
+  height: 40%;
+  box-shadow: 0px 0px 0px 10px black;
   border-radius: 50%;
 }
 
+.X::before,
+.X::after {
+  animation: X-Popup 0.2s ease-in;
+}
+
+.O::before {
+  animation: O-Popup 0.2s ease-in;
+}
+
+@keyframes X-Popup {
+  from {
+    transform: scale(0.75) rotate(45deg);
+  }
+  to {
+    transform: scale(1) rotate(45deg);
+  }
+}
+
+@keyframes O-Popup {
+  from {
+    transform: scale(0.75);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes win-Screen {
+  from {
+    transform: translate(0, 100%);
+  }
+  to {
+    transform: translate(0, 0);
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .overlay > div > h1 {
+    font-size: 3rem;
+  }
+  .overlay > div > button {
+    font-size: 1rem;
+  }
+}
+
 @media only screen and (max-width: 500px) {
+  .overlay > div > h1 {
+    font-size: 1.5rem;
+  }
   #grid {
     transform: scale(0.75);
   }

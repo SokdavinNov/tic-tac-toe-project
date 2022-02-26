@@ -1,13 +1,14 @@
 import "../App.css";
 import React, { useRef } from "react";
 
-function Grid(turnControl) {
+function Grid(props) {
   const gridRef = useRef([]);
-  const turn = turnControl.turn;
+  const turn = props.turn;
+  const overlayRef = props.overlayRef;
 
   return (
-    <div id="grid-Container">
-      <div id="grid">
+    <div className="grid-Container">
+      <div className="grid">
         {[...Array(9)].map((_, index) => {
           let row = Math.ceil((index + 1) / 3);
           let column = (index % 3) + 1;
@@ -131,7 +132,7 @@ function Grid(turnControl) {
       checkColumnWin(column, turn) ||
       checkDiagonalWin(row, column, turn)
     ) {
-      console.log("WINNER");
+      return true;
     }
   }
 
@@ -141,10 +142,12 @@ function Grid(turnControl) {
       gridRef.current[index].classList.contains("O")
     )
       return;
-    console.log(turn);
     gridRef.current[index].classList.add(turn);
-    turnControl.changeTurn();
-    checkWin(index, turn);
+    if (checkWin(index, turn)) {
+      overlayRef.current.classList.remove("hide");
+    } else {
+      props.changeTurn();
+    }
   }
 }
 
